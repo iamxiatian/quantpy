@@ -1,10 +1,15 @@
+# coding: utf-8
+
 import numpy  
 import pandas as pd  
 import math as m
 
 
-#Moving Average  
-def MA(df, n):  
+def MA(df, n):
+    '''
+    计算移动均线：Moving Average
+    输入为包含Close字段的DataFrame
+    '''
     MA = pd.Series(pd.rolling_mean(df['Close'], n), name = 'MA_' + str(n))  
     df = df.join(MA)  
     return df
