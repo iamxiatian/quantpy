@@ -1,21 +1,24 @@
 # coding: utf-8
 
-import numpy  
-import pandas as pd  
-import math as m
+'''
+常用指标的计算
+'''
+
+import pandas as pd
 
 
-def MA(df, n):
+def MA(series_data, n):
     '''
     计算移动均线：Moving Average
-    输入为包含Close字段的DataFrame
+    输入为Series序列数据
     '''
-    MA = pd.Series(pd.rolling_mean(df['Close'], n), name = 'MA_' + str(n))  
-    df = df.join(MA)  
-    return df
+    return pd.Series.rolling(series_data, window=n).mean()
 
-#Exponential Moving Average  
-def EMA(df, n):  
+
+def EMA(df, n):
+    '''
+    指数平滑移动平均线EMA(Exponential Moving Average)
+    '''
     EMA = pd.Series(pd.ewma(df['Close'], span = n, min_periods = n - 1), name = 'EMA_' + str(n))  
     df = df.join(EMA)  
     return df
