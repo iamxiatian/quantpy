@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import pandas as pd
+import numpy as np
 
 from mongoengine import connect
 from mongoengine import Document
@@ -31,11 +32,12 @@ class MongoData():
             shList.append([stock.code,
                            stock.date,
                            stock.open,
-                           stock.close,
-                           stock.high,
-                           stock.low,
-                           stock.volume])
-        return pd.DataFrame(shList, columns=columns)
+                           np.float(stock.close),
+                           np.float(stock.high),
+                           np.float(stock.low),
+                           np.int64(stock.volume)])
+        df = pd.DataFrame(shList, columns=columns)
+        return df
 
 
 class StockHistoryByDay(Document):
