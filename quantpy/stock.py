@@ -42,6 +42,20 @@ class Stock(object):
         self.df['MACD'] = MACD
         return self
 
+    def macd_cross(self):
+        '''
+        找出所有的金叉, 返回金叉的日期、类型、当时的MACD信息
+        http://stockcharts.com/school/doku.php?id=chart_school:technical_indicators:moving_average_convergence_divergence_macd
+        '''
+        if('MACD' not in self.df.columns):
+            self.MACD()
+            
+        for stock in self.df:
+            pass
+        crosses = []
+        return crosses
+
+        
 if __name__ == '__main__':
     stock = Stock()
     df = stock.MA(5).EMA(5).MACD().get_frame()
