@@ -37,6 +37,47 @@ class MongoData():
                            stock.volume])
         return pd.DataFrame(shList, columns=columns)
 
+class AllStockMongoData():
+    def __init__(self):
+        connect(MONGODB_DB_NAME, host=MONGODB_HOST, port=MONGODB_PORT,
+                username=MONGODB_USER_NAME, password=MONGODB_PASSWORD)
+    def read(self):
+        '''
+        获取所有股票的code,name信息
+        '''
+        allStock=RealTimeStock.objects;
+        if allStock is None or allStock == '':
+            return
+        stockList = []
+        columns = ['Code', 'Name']
+        for index,stock in enumerate(allStock):
+            stockList.append([stock.code,
+                       stock.name])
+        return pd.DataFrame(stockList, columns=columns)
+
+
+class RealTimeStock(Document):
+    #名称
+    name = StringField(max_length=200, required=True)
+    #代码
+    code = StringField(max_length=200, required=True)
+    #涨跌幅
+    changepercent = DecimalField(max_length=200, required=True)
+    #现价
+    trade = DecimalField(max_length=200, required=False)
+    #开盘价
+    open = DecimalField(max_length=200, required=False)
+    #最高价
+    high = DecimalField(max_length=200, required=False)
+    #最低价
+    low = DecimalField(max_length=200, required=False)
+    #昨日收盘价
+    settlement = DecimalField(max_length=200, required=False)
+    #成交量
+    volume = LongField(max_length=200, required=False)
+    #换手率
+    turnoverratio = DecimalField(max_length=200, required=False)
+
 
 class StockHistoryByDay(Document):
     # 交易日期
@@ -58,6 +99,6 @@ class StockHistoryByDay(Document):
 
 
 if __name__ == '__main__':
-    mongo_data = MongoData()
-    df = mongo_data.read(code='300425')
+    mongo_data = AllStockMongoData()
+    df = mongo_data.read()
     print(df)
