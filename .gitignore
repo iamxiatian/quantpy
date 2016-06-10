@@ -1,1 +1,5 @@
 **/*.pyc
+build/
+dist/
+quantpy.egg-info/
+.ipynb_checkpoints/

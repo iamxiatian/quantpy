@@ -1,7 +1,8 @@
 # coding: utf-8
 
 '''
-常用指标的计算
+常用指标的计算, 参考了以下内容：
+https://www.quantopian.com/posts/technical-analysis-indicators-without-talib-code
 '''
 
 import pandas as pd
@@ -15,14 +16,23 @@ def MA(series_data, n):
     return pd.Series.rolling(series_data, window=n).mean()
 
 
-def EMA(df, n):
+def EMA(series_data, n):
     '''
     指数平滑移动平均线EMA(Exponential Moving Average)
     '''
-    EMA = pd.Series(pd.ewma(df['Close'], span = n, min_periods = n - 1), name = 'EMA_' + str(n))  
-    df = df.join(EMA)  
-    return df
+    return pd.Series.ewm(series_data, span=n, min_periods=n-1).mean()
 
+
+def MACD(series_data, n_fast=12, n_slow=26, mid=9):
+    '''
+    计算MACD：MACD, MACD Signal and MACD difference, 快线默认为12天的EMA，慢线默认为26天的EMA
+    '''
+    EMAfast = EMA(series_data, n_fast)
+    EMAslow = EMA(series_data, n_slow)
+    DIF = EMAfast - EMAslow
+    DEA = EMA(DIF, mid)
+    MACD_VALUE = (DIF-DEA)*2
+    return DIF, DEA, MACD_VALUE
 
 #Momentum  
 def MOM(df, n):  
@@ -138,17 +148,6 @@ def ADX(df, n, n_ADX):
     df = df.join(ADX)  
     return df
 
-#MACD, MACD Signal and MACD difference  
-def MACD(df, n_fast, n_slow):  
-    EMAfast = pd.Series(pd.ewma(df['Close'], span = n_fast, min_periods = n_slow - 1))  
-    EMAslow = pd.Series(pd.ewma(df['Close'], span = n_slow, min_periods = n_slow - 1))  
-    MACD = pd.Series(EMAfast - EMAslow, name = 'MACD_' + str(n_fast) + '_' + str(n_slow))  
-    MACDsign = pd.Series(pd.ewma(MACD, span = 9, min_periods = 8), name = 'MACDsign_' + str(n_fast) + '_' + str(n_slow))  
-    MACDdiff = pd.Series(MACD - MACDsign, name = 'MACDdiff_' + str(n_fast) + '_' + str(n_slow))  
-    df = df.join(MACD)  
-    df = df.join(MACDsign)  
-    df = df.join(MACDdiff)  
-    return df
 
 #Mass Index  
 def MassI(df):  
