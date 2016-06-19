@@ -31,8 +31,8 @@ def MACD(series_data, n_fast=12, n_slow=26, mid=9):
     EMAslow = EMA(series_data, n_slow)
     DIF = EMAfast - EMAslow
     DEA = EMA(DIF, mid)
-    MACD_VALUE = (DIF-DEA)*2
-    return DIF, DEA, MACD_VALUE
+    HISTOGRAM = (DIF-DEA)*2
+    return DIF, DEA, HISTOGRAM
 
 #Momentum  
 def MOM(df, n):  
