@@ -3,3 +3,4 @@ build/
 dist/
 quantpy.egg-info/
 .ipynb_checkpoints/
+settings.cfg
