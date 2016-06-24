@@ -55,7 +55,7 @@ class Stock(object):
         crosses = []
         return crosses
 
-        
+
 if __name__ == '__main__':
     stock = Stock()
     df = stock.MA(5).EMA(5).MACD().get_frame()

@@ -43,49 +43,36 @@ class MongoData():
         '''
         获取所有股票的code,name信息
         '''
-        pass
-
-
-class AllStockMongoData():
-    def __init__(self):
-        connect(MONGODB_DB_NAME, host=MONGODB_HOST, port=MONGODB_PORT,
-                username=MONGODB_USER_NAME, password=MONGODB_PASSWORD)
-
-    def read(self):
-        '''
-        获取所有股票的code,name信息
-        '''
-        allStock=RealTimeStock.objects;
-        if allStock is None or allStock == '':
-            return
-        stockList = []
-        columns = ['Code', 'Name']
-        for index,stock in enumerate(allStock):
-            stockList.append([stock.code,
-                       stock.name])
-        return pd.DataFrame(stockList, columns=columns)
+        all_stocks = RealTimeStock.objects
+        if all_stocks is None or all_stocks == '':
+            return None
+        stock_list = [[stock.code, stock.name]
+                      for (index, stock) in enumerate(all_stocks)]
+        # for index, stock in enumerate(all_stocks):
+        #    stock_list.append([stock.code, stock.name])
+        return pd.DataFrame(stock_list, columns=['Code', 'Name'])
 
 
 class RealTimeStock(Document):
-    #名称
+    # 名称
     name = StringField(max_length=200, required=True)
-    #代码
+    # 代码
     code = StringField(max_length=200, required=True)
-    #涨跌幅
+    # 涨跌幅
     changepercent = DecimalField(max_length=200, required=True)
-    #现价
+    # 现价
     trade = DecimalField(max_length=200, required=False)
-    #开盘价
+    # 开盘价
     open = DecimalField(max_length=200, required=False)
-    #最高价
+    # 最高价
     high = DecimalField(max_length=200, required=False)
-    #最低价
+    # 最低价
     low = DecimalField(max_length=200, required=False)
-    #昨日收盘价
+    # 昨日收盘价
     settlement = DecimalField(max_length=200, required=False)
-    #成交量
+    # 成交量
     volume = LongField(max_length=200, required=False)
-    #换手率
+    # 换手率
     turnoverratio = DecimalField(max_length=200, required=False)
 
 
@@ -109,6 +96,5 @@ class StockHistoryByDay(Document):
 
 
 if __name__ == '__main__':
-    mongo_data = AllStockMongoData()
-    df = mongo_data.read()
-    print(df)
+    mongo_data = MongoData()
+    print(mongo_data.list_all_stocks())
