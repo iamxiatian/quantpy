@@ -31,7 +31,7 @@ class MongoData():
         for stock in StockHistoryByDay.objects(code=code):
             shList.append([stock.code,
                            stock.date,
-                           stock.open,
+                           np.float(stock.open),
                            np.float(stock.close),
                            np.float(stock.high),
                            np.float(stock.low),
